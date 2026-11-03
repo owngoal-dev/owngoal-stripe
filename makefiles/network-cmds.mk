@@ -6,7 +6,7 @@ ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 
 SUBPROJECTS          += network-cmds
 NETWORK-CMDS_VERSION := 669
-DEB_NETWORK-CMDS_V   ?= $(NETWORK-CMDS_VERSION)-1
+DEB_NETWORK-CMDS_V   ?= $(NETWORK-CMDS_VERSION)-2
 
 network-cmds-setup: setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,network_cmds,$(NETWORK-CMDS_VERSION),network_cmds-$(NETWORK-CMDS_VERSION))
@@ -66,7 +66,8 @@ network-cmds: network-cmds-setup libpcap
 		tproj=$$(basename $$tproj .tproj); \
 		NETWORK_CMDS_CFLAGS=; \
 		case $$tproj in \
-			traceroute|netstat|kdumpd|ping|route|arp) NETWORK_CMDS_CFLAGS="network_cmds_lib.o -Inetwork_cmds_lib";; \
+			traceroute) NETWORK_CMDS_CFLAGS="network_cmds_lib.o -Inetwork_cmds_lib -DHAVE_SOCKADDR_SA_LEN";; \
+			netstat|kdumpd|ping|route|arp) NETWORK_CMDS_CFLAGS="network_cmds_lib.o -Inetwork_cmds_lib";; \
 			traceroute6) NETWORK_CMDS_CFLAGS="-Itraceroute.tproj traceroute.tproj/as.c";; \
 		esac; \
 		echo $$tproj; \
