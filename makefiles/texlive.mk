@@ -189,9 +189,6 @@ texlive-package: texlive-stage
 
 	# texlive.mk Prep texlive
 	cp -a $(BUILD_STAGE)/texlive $(BUILD_DIST)
-ifneq (,$(filter iphoneos-arm64-roothide appletvos-arm64-roothide,$(MEMO_TARGET)))
-	$(LN_S) ../../../../../.jbroot $(BUILD_DIST)/texlive/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/texlive/bin/custom/.jbroot
-endif
 
 	# texlive.mk Sign
 	$(call SIGN,texlive,general.xml)
