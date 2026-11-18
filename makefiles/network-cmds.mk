@@ -45,7 +45,7 @@ endif
 	@$(call DOWNLOAD_FILES,$(BUILD_WORK)/network-cmds/include/mach, \
 		https://raw.githubusercontent.com/apple-oss-distributions/xnu/xnu-10002.41.9/osfmk/mach/coalition.h)
 	@$(call DOWNLOAD_FILES,$(BUILD_WORK)/network-cmds/include/corecrypto, \
-		https://github.com/apple-oss-distributions/xnu/raw/xnu-10002.41.9/EXTERNAL_HEADERS/corecrypto/cc{$(comma)n$(comma)sha2$(comma)digest$(comma)_{config$(comma)error$(comma)impl}}.h)
+		https://raw.githubusercontent.com/apple-oss-distributions/xnu/xnu-10002.41.9/EXTERNAL_HEADERS/corecrypto/cc{$(comma)n$(comma)sha2$(comma)digest$(comma)_{config$(comma)error$(comma)impl}}.h)
 
 	sed -i 's/#if INET6/#ifdef INET6/g' $(BUILD_WORK)/network-cmds/include/sys/sockio.h
 	sed -i '1s|^|#include <TargetConditionals.h>\n|' $(BUILD_WORK)/network-cmds/{dnctl,frame_delay,ecnprobe,pktapctl,pktmnglr,mptcp_client}/*.c
