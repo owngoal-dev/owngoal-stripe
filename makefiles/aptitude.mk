@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS      += aptitude
 APTITUDE_VERSION := 0.8.13
-DEB_APTITUDE_V   ?= $(APTITUDE_VERSION)-3
+DEB_APTITUDE_V   ?= $(APTITUDE_VERSION)-4
 
 aptitude-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),http://deb.debian.org/debian/pool/main/a/aptitude/aptitude_$(APTITUDE_VERSION).orig.tar.xz)
@@ -22,7 +22,7 @@ ifneq ($(wildcard $(BUILD_WORK)/aptitude/.build_complete),)
 aptitude:
 	@echo "Using previously built aptitude."
 else
-aptitude: aptitude-setup ncurses libboost xapian cwidget apt googletest libsigcplusplus autoconf-archive
+aptitude: aptitude-setup ncurses libboost xapian cwidget apt googletest libsigcplusplus autoconf-archive sqlite3
 	sed -i 's|/usr/share/xml/docbook/stylesheet/nwalsh|$(DOCBOOK_XSL)|g' \
 		$(BUILD_WORK)/aptitude/buildlib/docbook.mk \
 		$(BUILD_WORK)/aptitude/doc/aptitude-{txt,man,html}.xsl \

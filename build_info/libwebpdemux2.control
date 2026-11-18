@@ -2,6 +2,7 @@ Package: libwebpdemux2
 Version: @DEB_LIBWEBP_V@
 Architecture: @DEB_ARCH@
 Maintainer: @DEB_MAINTAINER@
+Depends: libwebp7 (= @DEB_LIBWEBP_V@)
 Section: Libraries
 Description: Lossy compression of digital photographic images.
  Image Compression format, based on the VP8 codec.

@@ -8,7 +8,7 @@ TEXLIVE_COMMIT := cf0f89c44f5d409c6d1bc0592a808af278611428
 TEXLIVE_INSTALLER_COMMIT := d141dbf36a93c17b7984f142bfebdc670eb45eee
 TEXLIVE_REPOSITORY := https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2024/tlnet-final
 TEXLIVE_BUILD_PKG_CONFIG_PATH ?=
-DEB_TEXLIVE_V   ?= $(TEXLIVE_VERSION)-1
+DEB_TEXLIVE_V   ?= $(TEXLIVE_VERSION)-2
 
 TLROOT=$(BUILD_STAGE)/texlive$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/texlive
 ORIGINAL_BIN_DIR=$(BUILD_STAGE)/texlive$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/bin
@@ -27,7 +27,7 @@ ifneq ($(wildcard $(BUILD_WORK)/texlive/.build_complete),)
 texlive:
 	@echo "Using previously built texlive."
 else
-texlive: texlive-setup cairo fontconfig freetype graphite2 harfbuzz icu4c libgd libgmp10 libpixman libpaper libpng16 libx11 libxaw mpfr4 potrace teckit zlib-ng zziplib
+texlive: texlive-setup cairo fontconfig freetype graphite2 harfbuzz icu4c libgd libgmp10 libpixman libpaper libpng16 libx11 libxaw mpfr4 potrace teckit zlib-ng zziplib ghostscript libxi
 	# just to clarify, in autotools convention we call "build" the
 	# system that is building the program, and "host" (iOS) the
 	# system that will run the program

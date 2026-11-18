@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS  += nmap
 NMAP_VERSION := 7.92
-DEB_NMAP_V   ?= $(NMAP_VERSION)
+DEB_NMAP_V   ?= $(NMAP_VERSION)-1
 
 NMAP_MANPAGE_LANGS := de es fr hr hu it ja pl pt_BR pt_PT ro ru sk zh
 

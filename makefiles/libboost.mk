@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS       += libboost
 LIBBOOST_VERSION  := 1.84.0
-DEB_LIBBOOST_V    ?= $(LIBBOOST_VERSION)-1
+DEB_LIBBOOST_V    ?= $(LIBBOOST_VERSION)-2
 
 ifneq (,$(findstring amd64,$(MEMO_TARGET)))
 LIBBOOST_CONFIGURE_ARGS := abi=sysv architecture=x86

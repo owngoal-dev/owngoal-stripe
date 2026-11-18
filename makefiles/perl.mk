@@ -7,7 +7,7 @@ PERL_MAJOR   := 5.32
 PERL_VERSION := $(PERL_MAJOR).1
 PERL_API_V   := $(PERL_MAJOR).0
 PERL_CROSS_V := 1.3.5
-DEB_PERL_V   ?= $(PERL_VERSION)-2
+DEB_PERL_V   ?= $(PERL_VERSION)-3
 
 export PERL_MAJOR
 
@@ -51,7 +51,7 @@ ifneq ($(wildcard $(BUILD_WORK)/perl/.build_complete),)
 perl:
 	@echo "Using previously built perl."
 else
-perl: perl-setup libgdbm
+perl: perl-setup libgdbm berkeleydb
 	cd $(BUILD_WORK)/perl && \
 	CC='$(CC)' AR='$(AR)' NM='$(NM)' OBJDUMP='objdump' \
 	HOSTCFLAGS='-DPERL_CORE -DUSE_CROSS_COMPILE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(CFLAGS_FOR_BUILD)' \

@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS     += libwebp
 LIBWEBP_VERSION := 1.2.2
-DEB_LIBWEBP_V   ?= $(LIBWEBP_VERSION)-1
+DEB_LIBWEBP_V   ?= $(LIBWEBP_VERSION)-2
 
 libwebp-setup: setup
 	$(call DOWNLOAD_FILE,$(BUILD_SOURCE)/libwebp-$(LIBWEBP_VERSION).tar.gz, \

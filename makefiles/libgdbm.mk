@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS     += libgdbm
 LIBGDBM_VERSION := 1.23
-DEB_LIBGDBM_V   ?= $(LIBGDBM_VERSION)-1
+DEB_LIBGDBM_V   ?= $(LIBGDBM_VERSION)-2
 
 libgdbm-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://ftpmirror.gnu.org/gdbm/gdbm-$(LIBGDBM_VERSION).tar.gz{$(comma).sig})

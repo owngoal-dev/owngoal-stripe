@@ -5,7 +5,7 @@ Maintainer: @DEB_MAINTAINER@
 Priority: optional
 Section: Scripting
 Homepage: http://dev.perl.org/perl5/
-Depends: libgdbm6
+Depends: libdb18.1, libgdbm6
 Description: Larry Wall's Practical Extraction and Report Language
  Perl is a highly capable, feature-rich programming language with over
  20 years of development. Perl 5 runs on over 100 platforms from

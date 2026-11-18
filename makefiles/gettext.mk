@@ -4,7 +4,7 @@ endif
 
 STRAPPROJECTS   += gettext
 GETTEXT_VERSION := 0.22
-DEB_GETTEXT_V   ?= $(GETTEXT_VERSION)-1
+DEB_GETTEXT_V   ?= $(GETTEXT_VERSION)-2
 
 gettext-setup: setup
 	$(call DOWNLOAD_FILES,$(BUILD_SOURCE),https://ftp.gnu.org/gnu/gettext/gettext-$(GETTEXT_VERSION).tar.xz{$(comma).sig})
@@ -16,9 +16,10 @@ gettext:
 	@echo "Using previously built gettext."
 else
 gettext: .SHELLFLAGS=-O extglob -c
-gettext: gettext-setup ncurses libunistring
+gettext: gettext-setup ncurses libunistring openmp
 	cd $(BUILD_WORK)/gettext && ./configure -C \
 		$(DEFAULT_CONFIGURE_FLAGS) \
+		ac_cv_prog_c_openmp="-Wp,-fopenmp -lomp" \
 		--disable-java \
 		--disable-csharp \
 		--without-libintl-prefix
