@@ -4,7 +4,7 @@ endif
 
 SUBPROJECTS       += tesseract
 TESSERACT_VERSION := 5.1.0
-DEB_TESSERACT_V   ?= $(TESSERACT_VERSION)-3
+DEB_TESSERACT_V   ?= $(TESSERACT_VERSION)-4
 
 ###
 # TODO:
@@ -26,6 +26,7 @@ tesseract: tesseract-setup leptonica libarchive curl openmp
 	rm -f $(BUILD_WORK)/tesseract/VERSION # This, amazingly enough, makes compiling on macOS not work. (Non-case-sensitive)
 	cd $(BUILD_WORK)/tesseract && PKG_CONFIG_PATH="$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig:$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)$(MEMO_ALT_PREFIX)/lib/pkgconfig:$(BUILD_BASE)$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/pkgconfig" ./configure -C \
 		$(DEFAULT_CONFIGURE_FLAGS) \
+		CXXFLAGS="$(CXXFLAGS) -Xpreprocessor -fopenmp" LIBS="-lomp" \
 		--datarootdir=$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/share/tesseract-ocr/5/ \
 		--disable-doc # The docs do not work, so we'll disable them for now
 	+$(MAKE) -C $(BUILD_WORK)/tesseract
@@ -36,7 +37,7 @@ tesseract: tesseract-setup leptonica libarchive curl openmp
 		$(BUILD_STAGE)/tesseract/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig/tesseract.pc
 ifneq ($(filter iphoneos% appletvos%,$(MEMO_TARGET)),)
 	# Static consumers of the public C API also require the Apple C++ runtime.
-	sed -i '/^Libs.private:/s/$$/ -lc++/' $(BUILD_STAGE)/tesseract/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig/tesseract.pc
+	sed -i '/^Libs.private:/s/$$/ -lc++ -lomp/' $(BUILD_STAGE)/tesseract/$(MEMO_PREFIX)$(MEMO_SUB_PREFIX)/lib/pkgconfig/tesseract.pc
 endif
 ifneq ($(filter -flto%,$(CFLAGS)),)
 	# Keep installed LTO runtime; rebuild the public library and folded helpers.
