@@ -59,7 +59,7 @@ cd /work
 export GNUPGHOME=/root/.gnupg-procursus-relaxin
 export MEMO_PGP_SIGN_KEY=<key>
 export BOOTSTRAP_APT_KEYRING=/work/build_work/procursus-relaxin.gpg
-make repository MEMO_REPO_URI=https://procursus.82flex.com
+make repository MEMO_REPO_URI=https://stripe.owngoal.dev
 ```
 
 ## 上传

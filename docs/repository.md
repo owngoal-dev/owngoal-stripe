@@ -2,6 +2,14 @@
 
 分别使用 iOS、tvOS 构建容器维护各自的源码和构建结果；归档容器只接收产物，不运行编译。
 
+## 发布准则：正式站只增不删
+
+- 没有独立测试站；`procursus.82flex.com` 与 `stripe.owngoal.dev` 是同一正式源的入口，任何上传都按正式发布对待。
+- 软件源只增加：新版本、新文件、新索引条目；不删除旧包、旧版本、旧 Bootstrap 或旧索引条目。
+- 同步严禁使用 `rsync --delete`；归档严禁使用 `publish_repo.py update --prune`；不要手工删除 pool 或索引中的旧文件。
+- 旧版本即使无人安装、内容旧，也继续保留；客户端是否安装旧包不构成删除理由。
+- 修复通过发布新版本完成；不要用 `--replace` 覆盖同版本的旧内容。
+
 ## 共享交付目录
 
 在 Docker 宿主上创建：
@@ -82,7 +90,7 @@ python3 build_tools/publish_repo.py verify \
 
 两平台分别归档到自己的 `pool/main/<target>/1900`，共用 `dists/1900` 的 Release 和签名。更新一个平台保留另一个平台的索引；两次操作必须使用相同的 `--state-dir`（默认 `build_work/publish-state`），以共用归档锁。
 
-默认保留旧包。只有输入目录代表该平台完整期望包集合时才使用 `update --prune`；不得对局部导出使用它。拆包、删除包需明确移除旧交付文件后再按完整集合清理。`Architecture: all` 包也保留各平台路径，不跨平台覆盖；同版本内容不同应先核对原因。
+所有历史版本一律保留。不要使用 `update --prune`，不要手工删除旧交付文件或旧 pool 文件；新增包和修复版本通过新版本进入索引。`Architecture: all` 包也保留各平台路径，不跨平台覆盖；同版本内容不同应先核对原因。
 
 验收检查 Release 签名、索引和包哈希、keyring、Bootstrap，并使用隔离的 APT 状态通过本机 HTTP 更新索引和下载样本。可在 `verify` 后追加 `--check-install curl`，在空的隔离状态中模拟指定包的依赖安装，不执行安装。它不上传网站，也不等同于全仓运行时测试或全部依赖可安装性检查。
 
@@ -98,9 +106,9 @@ rsync -avc --delay-updates build_repo/dists/ <source-host>:/srv/apt/dists/
 rsync -avc build_repo/CydiaIcon.png <source-host>:/srv/apt/
 ```
 
-不用 `--delete`，避免删除其他平台或保留版本。上传失败后可重跑；前三条成功后才执行索引上传。容器无法联网时，可将这些产物取到配置好网络的宿主机，用相同的 rsync 顺序上传。
+严禁使用 `--delete`。正式站只增不删；上传失败后可重跑，前三条成功后才执行索引上传。容器无法联网时，可将这些产物取到配置好网络的宿主机，用相同的 rsync 顺序上传。
 
-测试站点使用 `procursus.82flex.com`，正式发布使用 `stripe.owngoal.dev`，Bootstrap 内置地址须与用途一致。发布后在客户端执行 `apt-get update`，并下载两个架构的样本包验证。
+没有独立测试站：`procursus.82flex.com` 与 `stripe.owngoal.dev` 是同一个正式源的入口，Bootstrap 内置地址须与正式源一致。发布后在客户端执行 `apt-get update`，并下载两个架构的样本包验证。
 
 ## 软件源图标
 

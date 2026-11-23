@@ -129,7 +129,7 @@ Mach-O 代码签名、Bootstrap 归档签名、APT Release 签名是不同环节
 | --- | --- |
 | 项目名称 | `OwnGoal Stripe`。文档、README 和终端展示使用新名称；`procursus-keyring`、`procursus.sources`、`.procursus_strapped`、`owngoal-procursus.gpg` 和内部 `PROCURSUS` 守卫保留原名以兼容 Relaxin 与现有 Bootstrap |
 | 支持平台 | `iphoneos-arm64-roothide`（Debian 架构 `iphoneos-arm64e`）与 `appletvos-arm64-roothide`（`appletvos-arm64e`）；二者 Mach-O 架构均为 arm64 |
-| 源地址 | `https://stripe.owngoal.dev`；正式发布筹备中 |
+| 源地址 | `https://stripe.owngoal.dev`；`procursus.82flex.com` 为同一正式源入口，没有独立测试站 |
 | alt 拆分 | 不采用。发布侧只保留一个主源，不复制 LLVM 到 alt-repo，也不从主 pool 删除 LLVM |
 | 源布局 | 采用普通 Procursus 上游形态：suite 为 CF 版本，pool 按目标和 CF 版本分目录，dists 按 Deb 架构生成索引；iOS 与 tvOS 共享 suite `1900`，不采用 RootHide 的 `<debarch>/<cfver>` suite |
 | Bootstrap 归档 | 使用 `bootstrap-<DEB_ARCH>.tar.zst` / `bootstrap-ssh-<DEB_ARCH>.tar.zst`；iOS 发布到 `/bootstraps/<CF版本>/`，tvOS 发布到 `/bootstraps/<DEB_ARCH>/<CF版本>/` |

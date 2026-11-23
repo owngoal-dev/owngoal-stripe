@@ -45,7 +45,7 @@
 | P03 | 临时副本与暂存编排 | `build_repo` 作为本地输出目录重新引入，并加入 `.gitignore`；上一轮 stash 的旧编排仍不作为正式约定，新脚本独立实现 | 已处理；stash 未应用 |
 | P04 | 双平台共享 suite | iOS 与 tvOS 共用 suite `1900`；`dists/1900` 下生成 `binary-iphoneos-arm64e` 与 `binary-appletvos-arm64e`，根 Release 列出两种架构；pool 按 `iphoneos-arm64-roothide` / `appletvos-arm64-roothide` 分目录。Bootstrap sources 保持 `Suites: 1900` | 已决策，未发布；发布侧负责合并两个目标的索引 |
 | P05 | 双平台 Bootstrap 命名 | 使用 `bootstrap-<DEB_ARCH>.tar.zst` / `bootstrap-ssh-<DEB_ARCH>.tar.zst`；iOS 发布到 `/bootstraps/<CF版本>/`，tvOS 发布到 `/bootstraps/<DEB_ARCH>/<CF版本>/` | 已实施；iOS Bootstrap 已上传 |
-| P06 | 本地 APT 归档 | 新脚本 `build_tools/publish_repo.py` 与 `make repository`：第一批 iOS；按 SHA256 增量；默认保留旧版本和外部包；同名不同内容默认报错，`--replace` 才覆盖；包集合未变时跳过索引重建；状态在 `build_work/publish-state/`；验证含 Bootstrap 和本地 `apt-get`；不上传 | 已实现；Ubuntu 24.04 容器 76 Deb 与全量构建容器 1390 Deb（临时密钥、合成 keyring/Bootstrap）通过；正式密钥和真实 Bootstrap 未完成无终端签名验收 |
+| P06 | 本地 APT 归档 | 新脚本 `build_tools/publish_repo.py` 与 `make repository`：第一批 iOS；按 SHA256 增量；正式站只增不删，保留全部历史版本和外部包；禁止 `--prune`、`--delete` 和手工删除；同名不同内容默认报错，修复通过新版本发布；包集合未变时跳过索引重建；状态在 `build_work/publish-state/`；验证含 Bootstrap 和本地 `apt-get`；不上传 | 已实现；Ubuntu 24.04 容器 76 Deb 与全量构建容器 1390 Deb（临时密钥、合成 keyring/Bootstrap）通过；正式密钥和真实 Bootstrap 未完成无终端签名验收 |
 
 ## 验证边界
 
@@ -60,6 +60,6 @@
 
 本轮品牌与双平台决策的验证范围：`git diff --check` 通过，`make print-MEMO_REPO_URI` 解析为新地址；未重打 Bootstrap 或 Debian 包，现有 `build_strap` 产物仍使用旧源地址和旧 preferences 文件名。双平台的发布聚合尚未实际运行。
 
-本地归档器的验证范围：7 个单元测试通过（增量复制、mtime/inode 不变、同名冲突、`--replace`、`--prune`、Deb822 解析、索引重建判定）；用真实 Deb、临时 GPG 密钥和合成 keyring/Bootstrap 构造的验收通过；`update --dry-run` 在真实 `build_dist` 上识别出 75 个 iOS 包；`make -n repository` 展开正确。
+本地归档器的验证范围：7 个单元测试通过（增量复制、mtime/inode 不变、同名冲突、`--replace`、Deb822 解析、索引重建判定；`--prune` 仅作为工具测试存在，正式发布禁止使用）；用真实 Deb、临时 GPG 密钥和合成 keyring/Bootstrap 构造的验收通过；`update --dry-run` 在真实 `build_dist` 上识别出 75 个 iOS 包；`make -n repository` 展开正确。
 
 另在 Ubuntu 24.04 容器中用 76 个真实 Deb（含合成 `procursus-keyring`）跑通 `update`、第二次运行的索引跳过（Release/InRelease/Packages 的 inode 与 mtime 不变）以及 `verify` 的 Release、Packages、keyring、Bootstrap 和本地 `apt-get update`/`download`。在已全量构建的 `procursus-final-06` 容器上，用 1390 个最终 Deb、临时密钥、合成 keyring 和 70 成员合成 Bootstrap 跑通首次归档、索引生成与签名，以及第二次 `make repository` 的索引跳过和完整 `verify`（`hello=2.10` 下载通过）。真实发布密钥带口令，无终端环境无法完成签名；正式验收需先解锁 GPG agent，或改用无口令的发布密钥。真实 keyring 包和正式 Bootstrap 也尚未验收。
