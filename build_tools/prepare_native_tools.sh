@@ -237,6 +237,8 @@ apply_patch() {
     fi
 }
 if [[ $HOST_PLATFORM == linux ]]; then
+    # cctools' foreign Mach-O headers need an explicit endianness on Linux.
+    host_cppflags+=(-D__LITTLE_ENDIAN__=1)
     # Use the distribution tools even when resuming an older private setup.
     for host_tool in triehash meson cython python3 go; do
         [[ -x /usr/bin/$host_tool ]] || fail "missing $host_tool; rerun build_tools/prepare_linux_host.sh"
@@ -277,6 +279,7 @@ fetch_source libroothide https://github.com/owngoal-dev/libroothide.git "$ROOTHI
 apply_patch "$HOST_TOOL_ROOT/src/libroothide" "$CHECKOUT/build_patch/roothide/symredirect-universal.diff"
 apply_patch "$HOST_TOOL_ROOT/src/libroothide" "$CHECKOUT/build_patch/roothide/symredirect-normal-bind.diff"
 apply_patch "$HOST_TOOL_ROOT/src/libroothide" "$CHECKOUT/build_patch/host-symredirect/portable-headers.diff"
+apply_patch "$HOST_TOOL_ROOT/src/libroothide" "$CHECKOUT/build_patch/host-symredirect/skip-chflags.diff"
 if [[ $HOST_PLATFORM == linux ]]; then
     # Header definitions only: do not link a target SDK or build cctools/libtapi.
     fetch_source cctools-headers https://github.com/tpoechtrager/cctools-port.git "$CCTOOLS_COMMIT"

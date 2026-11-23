@@ -6,7 +6,7 @@ ifeq (,$(findstring darwin,$(MEMO_TARGET)))
 
 STRAPPROJECTS     += file-cmds
 FILE-CMDS_VERSION := 430.100.5
-DEB_FILE-CMDS_V   ?= $(FILE-CMDS_VERSION)
+DEB_FILE-CMDS_V   ?= $(FILE-CMDS_VERSION)-1
 
 file-cmds-setup: setup
 	$(call GITHUB_ARCHIVE,apple-oss-distributions,file_cmds,$(FILE-CMDS_VERSION),file_cmds-$(FILE-CMDS_VERSION))

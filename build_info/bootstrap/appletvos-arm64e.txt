@@ -16,7 +16,7 @@ diffutils==3.10
 diskdev-cmds==718
 dpkg==1.22.6-1
 essential==0-6
-file-cmds==430.100.5
+file-cmds==430.100.5-1
 findutils==4.9.0-1
 gpgv==2.4.5
 grep==3.11-1

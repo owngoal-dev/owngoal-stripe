@@ -1,0 +1,38 @@
+--- a/symredirect.cpp
++++ b/symredirect.cpp
+@@ -43,6 +43,7 @@
+ };
+ 
+ int g_slice_index = 0;
++static const char* g_target_path = NULL;
+ 
+ const char* g_shim_install_name = "@loader_path/.jbroot/usr/lib/libvrootapi.dylib";
+ 
+@@ -76,6 +77,19 @@
+ 
+ bool processSymbol(struct mach_header_64* header, int ordinal, const char* symbol)
+ {
++    // file-cmds' chflags(1) already translates its input via fts_open().
++    // Redirecting chflags()/lchflags() too would translate the path twice.
++    if (g_target_path) {
++        const char* suffix = "/usr/bin/chflags";
++        size_t path_len = strlen(g_target_path);
++        size_t suffix_len = strlen(suffix);
++        if (path_len >= suffix_len &&
++            strcmp(g_target_path + path_len - suffix_len, suffix) == 0 &&
++            (strcmp(symbol, "_chflags") == 0 || strcmp(symbol, "_lchflags") == 0)) {
++            LOG("skip chflags shim for %s on %s\n", symbol, g_target_path);
++            return false;
++        }
++    }
+     char* library = getLibraryByOrdinal(header, ordinal);
+     LOG("import %s from %x:%s\n", symbol, ordinal, library);
+     
+@@ -875,6 +889,7 @@
+     }
+     
+     const char* target = argv[1];
++    g_target_path = target;
+     printf("symredirect %s\n", target);
+     printf("vroot api count = %d\n", g_shim_apis.size());
+     if(processMachO(target, processTarget) < 0) {
